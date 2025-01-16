@@ -4,7 +4,7 @@ import type { MessageBar } from './message-bar.js';
 
 test.describe('Message Bar', () => {
   test.beforeEach(async ({ page }) => {
-    await page.goto(fixtureURL('components-messagebar--message'));
+    await page.goto(fixtureURL('components-messagebar--default'));
     await page.waitForFunction(() => customElements.whenDefined('fluent-message-bar'));
   });
 
@@ -68,6 +68,7 @@ test.describe('Message Bar', () => {
     await expect(element).toHaveCustomState('rounded');
   });
 
+  // @FIXME: This test is failing on OSX - https://github.com/microsoft/fluentui/issues/33172
   test('should set and retrieve the `layout` property correctly', async ({ page }) => {
     const element = page.locator('fluent-message-bar');
 

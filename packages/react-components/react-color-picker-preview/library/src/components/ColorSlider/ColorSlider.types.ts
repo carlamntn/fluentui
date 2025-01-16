@@ -1,9 +1,9 @@
 import * as React from 'react';
 import type { ComponentProps, ComponentState, Slot, EventHandler, EventData } from '@fluentui/react-utilities';
+import type { HsvColor } from '../ColorPicker/ColorPicker.types';
 
 export type SliderOnChangeData = EventData<'change', React.ChangeEvent<HTMLInputElement>> & {
-  value: number;
-  channel: string;
+  color: HsvColor;
 };
 
 export type ColorSliderSlots = {
@@ -18,26 +18,9 @@ export type ColorSliderSlots = {
  */
 export type ColorSliderProps = Omit<
   ComponentProps<Partial<ColorSliderSlots>, 'input'>,
-  'defaultValue' | 'onChange' | 'value'
+  'defaultValue' | 'onChange' | 'value' | 'color'
 > & {
   channel?: string;
-  /**
-   * The starting value for an uncontrolled ColorSlider.
-   * Mutually exclusive with `value` prop.
-   */
-  defaultValue?: number;
-
-  /**
-   * The max value of the Slider.
-   * @default 360
-   */
-  max?: number;
-
-  /**
-   * The min value of the Slider.
-   * @default 0
-   */
-  min?: number;
 
   /**
    * Triggers a callback when the value has been changed. This will be called on every individual step.
@@ -51,10 +34,14 @@ export type ColorSliderProps = Omit<
   vertical?: boolean;
 
   /**
-   * The current value of the controlled ColorSlider.
-   * Mutually exclusive with `defaultValue` prop.
+   * Color of the COlorPicker
    */
-  value?: number;
+  color?: HsvColor;
+
+  /**
+   * The starting color for an uncontrolled ColorSlider.
+   */
+  defaultColor?: HsvColor;
 };
 
 /**

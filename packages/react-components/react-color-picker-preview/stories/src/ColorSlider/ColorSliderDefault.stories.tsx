@@ -1,6 +1,7 @@
 import * as React from 'react';
+import { tinycolor } from '@ctrl/tinycolor';
 import { ColorSlider, ColorSliderProps } from '@fluentui/react-color-picker-preview';
-import { useId, Button, Label, makeStyles } from '@fluentui/react-components';
+import { Button, makeStyles } from '@fluentui/react-components';
 
 const useStyles = makeStyles({
   example: {
@@ -17,19 +18,19 @@ const useStyles = makeStyles({
   },
 });
 
+const DEFAULT_COLOR_HSV = tinycolor('#2be700').toHsv();
+
 export const Default = (props: Partial<ColorSliderProps>) => {
   const styles = useStyles();
-  const id = useId();
-  const [sliderValue, setSliderValue] = React.useState(160);
-  const onSliderChange: ColorSliderProps['onChange'] = (_, data) => setSliderValue(data.value);
-  const resetSlider = () => setSliderValue(0);
+  const [color, setColor] = React.useState(DEFAULT_COLOR_HSV);
+  const onSliderChange: ColorSliderProps['onChange'] = (_, data) => setColor({ ...data.color, a: data.color.a ?? 1 });
+  const resetSlider = () => setColor(DEFAULT_COLOR_HSV);
 
   return (
     <div className={styles.example}>
-      <Label htmlFor={id}>Control Slider [ Current Value: {sliderValue} ]</Label>
-      <ColorSlider value={sliderValue} max={360} onChange={onSliderChange} id={id} {...props} />
-      <ColorSlider value={sliderValue} max={360} onChange={onSliderChange} id={id} vertical {...props} />
-      <div className={styles.previewColor} style={{ backgroundColor: `hsl(${sliderValue}, 100%, 50%)` }} />
+      <ColorSlider color={color} onChange={onSliderChange} {...props} />
+      <ColorSlider color={color} onChange={onSliderChange} vertical {...props} />
+      <div className={styles.previewColor} style={{ backgroundColor: tinycolor(color).toHexString() }} />
       <Button onClick={resetSlider}>Reset</Button>
     </div>
   );

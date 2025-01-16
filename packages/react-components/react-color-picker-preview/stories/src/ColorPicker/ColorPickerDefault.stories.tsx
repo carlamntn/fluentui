@@ -1,6 +1,13 @@
 import * as React from 'react';
+import { tinycolor } from '@ctrl/tinycolor';
 import { makeStyles } from '@fluentui/react-components';
-import { ColorPicker, ColorSlider, AlphaSlider, ColorPickerProps } from '@fluentui/react-color-picker-preview';
+import {
+  ColorPicker,
+  ColorSlider,
+  AlphaSlider,
+  ColorPickerProps,
+  ColorArea,
+} from '@fluentui/react-color-picker-preview';
 
 const useStyles = makeStyles({
   example: {
@@ -17,26 +24,23 @@ const useStyles = makeStyles({
   },
 });
 
+const DEFAULT_COLOR_HSV = tinycolor('#2be700').toHsv();
+
 export const Default = () => {
   const styles = useStyles();
-
-  const [hue, setHue] = React.useState(160);
-  const [alpha, setAlpha] = React.useState(50);
-  const handleChange: ColorPickerProps['onColorChange'] = (_, data) => {
-    if (data.value) {
-      data.channel === 'hue' && setHue(data.value);
-      data.channel === 'alpha' && setAlpha(data.value);
-    }
-  };
+  const [color, setColor] = React.useState(DEFAULT_COLOR_HSV);
+  const handleChange: ColorPickerProps['onColorChange'] = (_, data) =>
+    setColor({ ...data.color, a: data.color.a ?? 1 });
 
   return (
     <div className={styles.example}>
-      <ColorPicker onColorChange={handleChange}>
-        <ColorSlider value={hue} max={360} />
-        <AlphaSlider overlayColor={`hsl(${hue}, 100%, 45%)`} value={alpha} />
+      <ColorPicker color={color} onColorChange={handleChange}>
+        <ColorSlider />
+        <AlphaSlider />
+        <ColorArea />
       </ColorPicker>
 
-      <div className={styles.previewColor} style={{ backgroundColor: `hsla(${hue}, 100%, 45%, ${alpha / 100})` }} />
+      <div className={styles.previewColor} style={{ backgroundColor: tinycolor(color).toRgbString() }} />
     </div>
   );
 };
